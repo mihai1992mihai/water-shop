@@ -1,0 +1,218 @@
+package com.shop.watershop.configuration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Autowired
+    public MyUserDetailsService myUserDetailsService;
+
+
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .userDetailsService(myUserDetailsService)
+                .passwordEncoder(passwordEncoder());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http
+                .authorizeRequests()
+                .antMatchers("/", "/login", "/registration").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .failureUrl("/login?error=true")
+                .defaultSuccessUrl("/home")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login")
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/access-denied")
+                .and()
+                .rememberMe()
+                .key("someSecret")
+                .tokenValiditySeconds(24*60*60)
+                .userDetailsService(myUserDetailsService)
+                .rememberMeParameter("email")
+                .rememberMeCookieName("email")
+                .and()
+                .sessionManagement()
+                .sessionFixation().changeSessionId()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .invalidSessionUrl("/login")
+                .maximumSessions(5)
+                .sessionRegistry(sessionRegistry())
+                .and()
+                .and()
+                .csrf().disable();
+
+
+
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/h2-console/**","/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+    }
+
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests().antMatchers(
+//                        "/registration**",
+//                        "/js/**",
+//                        "/css/**",
+//                        "/img/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .invalidateHttpSession(true)
+//                .clearAuthentication(true)
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .logoutSuccessUrl("/login?logout")
+//                .permitAll();
+//    }
+//
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web
+//                .ignoring()
+//                .antMatchers("/h2-console/**");
+//    }
+
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//
+//        http.authorizeRequests().antMatchers(
+//                        "/registration**",
+//                        "/js/**",
+//                        "/css/**",
+//                        "/img/**").permitAll()
+//                .antMatchers("/").permitAll()
+//                .antMatchers("/login").permitAll()
+//                .antMatchers("/registration").permitAll()
+//                .antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
+//                .authenticated().and().csrf().disable().formLogin()
+//                .loginPage("/login").failureUrl("/login?error=true")
+//                .defaultSuccessUrl("/admin/home")
+//                .usernameParameter("user_name")
+//                .passwordParameter("password")
+//                .and().logout()
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .logoutSuccessUrl("/login").and().exceptionHandling()
+//                .accessDeniedPage("/access-denied");
+//    }
+
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+
+//        http.authorizeHttpRequests(authz -> authz
+//                        .antMatchers("/registration**", "/js/**", "/css/**", "/img/**").permitAll()
+//                        .anyRequest().authenticated())
+//
+//                .formLogin(formLogin -> formLogin
+//                        .loginPage("/login")
+//                        .permitAll()
+//                        .defaultSuccessUrl("/user", true)
+//                        .failureUrl("/login?error"))
+//                .loginPage("/login")
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .invalidateHttpSession(true)
+//                .clearAuthentication(true)
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .logoutSuccessUrl("/login?logout")
+//                .permitAll();
+////
+//        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//            http.authorizeHttpRequests(authz -> authz
+//                            .requestMatchers("/registration**", "/js/**", "/css/**", "/img/**").permitAll()
+//                            .anyRequest().authenticated())
+//
+//                    .formLogin(formLogin -> formLogin
+//                            .loginPage("/login")
+//                            .permitAll()
+//                            .defaultSuccessUrl("/user", true)
+//                            .failureUrl("/login?error"))
+//                    .antMatchers(HttpMethod.DELETE,"/delete/*/contact").hasRole("ADMIN")
+//                    .antMatchers(HttpMethod.POST).hasAnyRole("ADMIN", "USER")
+//                    .antMatchers(HttpMethod.GET).permitAll()
+//                    .anyRequest().authenticated()
+//                    .and()
+//                    .httpBasic()
+//                    .and()
+//                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//
+//            return http.build();
+//
+//
+//        http.userDetailsService(userDetailsService)
+//                .csrf().disable(); // Disable CSRF for simplicity (you should handle it properly in production)
+//
+//            http.authorizeRequests().antMatchers(
+//                            "/registration**",
+//                            "/js/**",
+//                            "/css/**",
+//                            "/img/**").permitAll()
+//                    .anyRequest().authenticated()
+//                    .and()
+//                    .formLogin()
+//                    .loginPage("/login")
+//                    .permitAll()
+//                    .and()
+//                    .logout()
+//                    .invalidateHttpSession(true)
+//                    .clearAuthentication(true)
+//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                    .logoutSuccessUrl("/login?logout")
+//                    .permitAll();
+//
+//
+//        return http.build();
+
+
+//    }
+
+
+}

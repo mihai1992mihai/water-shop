@@ -1,0 +1,61 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <link th:href="@{/inventory-stylesheet.css}" rel="stylesheet">
+</head>
+<body>
+<div class="topnav">
+    <a th:href="@{/home}">Form</a>
+    <a class="active" th:href="@{/inventory}">Shopping Basket</a>
+    <a sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a>
+</div>
+
+<div th:if="${status} == 'success'" class="alert success">
+    <strong> You successfully submited the item! </strong>
+</div>
+<div th:if="${status} == 'failed'" class="alert">
+    <strong> You failed to submit the item. </strong>
+</div>
+
+
+<div class="container">
+    <table>
+        <tr class="head">
+            <th>Product Name</th>
+            <th>Amount</th>
+            <th>Unit price</th>
+            <th>Order price</th>
+            <th>Order Date</th>
+        </tr>
+        <!--               <tr th:each="item: ${itemsList}">-->
+        <!--                   <td th:text="${item.category}"> </td>-->
+        <!--                   <td th:text="${item.amount}"> </td>-->
+        <!--                   <td  th:text="${#numbers.formatCurrency(item.price)}"> </td>-->
+        <!--                   <td type="date" th:text="${date}"> </td>-->
+        <!--                   <td>-->
+        <!--                       <a role="button" style="color:white; background-color: #263238" class="table-button" th:href="@{/(id = ${item.id})}">Update</a>-->
+        <!--                   </td>-->
+        <!--               </tr>-->
+        <tr th:each="item : ${items}">
+
+            <td th:text="${item.category}"></td>
+            <td th:text="${item.amount}"></td>
+            <td th:text="${item.price}"></td>
+            <td th:text="${item.price * item.amount}"></td>
+            <td th:text="${#dates.format(item.date, 'yyyy-MM-dd')}"></td>
+
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td>-</td>
+            <td>-</td>
+            <td th:text="${total}"></td>
+            <td></td>
+        </tr>
+
+
+    </table>
+</div>
+</body>
+</html>

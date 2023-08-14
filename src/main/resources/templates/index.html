@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <link th:href="@{/form-stylesheet.css}" rel="stylesheet">
+</head>
+<body>
+<div class="topnav">
+    <a class="active" th:href="@{/}">Form</a>
+    <a th:href="@{/inventory}">Shopping Basket</a>
+    <a sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a>
+</div>
+
+<div class="container">
+    <h2> Water store </h2>
+    <form method="post" th:object="${itemsList}" th:action="@{/post}">
+
+        <table style="margin-left:auto; margin-right:auto; text-align:center">
+            <tr th:each="item, itemStat : ${itemsList.items}">
+                <td style="font-size: 26px;" th:text="${item.category}"></td>
+                <td></td>
+                <input type="hidden" th:field="*{items[__${itemStat.index}__].id}" />
+                <input type="hidden" th:field="*{items[__${itemStat.index}__].category}" />
+                <input type="hidden" th:field="*{items[__${itemStat.index}__].price}" />
+                <td><input type="number" placeholder="Enter the number" th:field="*{items[__${itemStat.index}__].amount}" /></td>
+            </tr>
+        </table>
+
+
+        <input type="date" style="color:black" th:field="*{date}" />
+        <p style="color:red" th:errors="*{date}" th:if="${#fields.hasErrors('date')}"></p>
+
+        <input type="submit" value="Add to basket">
+
+    </form>
+</div>
+</body>
+</html>
+
+
