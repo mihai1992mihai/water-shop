@@ -33,6 +33,9 @@ class ItemServiceImplTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private UserService userService;
+
     @Test
     public void findById() {
 
@@ -205,6 +208,7 @@ class ItemServiceImplTest {
         user.setId(1L);
         user.setEmail("user@example.com");
         user.setPassword("password");
+
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
         Authentication authentication = mock(Authentication.class);
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -220,12 +224,67 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void setDate() {
+    void setDateFromExistingItem() {
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@example.com");
+        user.setPassword("password");
+        Item item = new Item();
+        item.setId(1L);
+        item.setCategory("Books");
+        item.setPrice(10.0);
+        item.setAmount(2.0);
+
+        LocalDate localDate = LocalDate.now();
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        item.setDate(date);
+        Set<Item> items = new HashSet<>(Collections.singleton(item));
+        user.setItems(items);
+
+        when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        UserDetails userDetails = mock(UserDetails.class);
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+        when(userDetails.getUsername()).thenReturn("user@example.com");
+
+        // when
+        Date result = itemService.setDate();
+
+        // then
+        assertEquals(date, result);
+    }
+
+    @Test
+    void setDateNew() {
+
         LocalDate localDate = LocalDate.now();
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        Date expectedDate = itemService.setDate();
+        User user = mock(User.class);
+        user.setId(1L);
+        user.setEmail("user@example.com");
+        user.setPassword("password");
+        Set<Item> itemsMock = mock(Set.class);
 
-        assertEquals(date, expectedDate);
+        when(user.getItems()).thenReturn(itemsMock);
+        when(itemsMock.isEmpty()).thenReturn(true);
+        when(userService.getLoggedUser()).thenReturn(user);
+        when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
+
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        UserDetails userDetails = mock(UserDetails.class);
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+        when(userDetails.getUsername()).thenReturn("user@example.com");
+
+
+        Date result = itemService.setDate();
+
+        assertEquals(date, result);
     }
 }

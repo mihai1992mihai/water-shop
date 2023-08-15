@@ -41,8 +41,8 @@ public class UserController {
 		}
 
 		userService.save(user);
-		System.out.println("registration"+ user.getItems());
-		return "redirect:/registration?success";
+
+		return "redirect:/login?success";
 	}
 
 }

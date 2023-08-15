@@ -120,7 +120,13 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Date setDate() {
         LocalDate localDate = LocalDate.now();
-        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date date;
+
+        if(getLoggedUser().getItems().isEmpty()) {  //???
+            date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        } else {
+            date = getLoggedUser().getItems().stream().findAny().get().getDate();
+        }
 
         return date;
     }

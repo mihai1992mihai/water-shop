@@ -15,7 +15,7 @@ public class ItemsList {
 
     private ArrayList<Item> items;
 
-    @Future(message = "Date must be in the future")
+    @Future(message = "Choose a date that is after today")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 

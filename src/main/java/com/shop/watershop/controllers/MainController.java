@@ -39,7 +39,7 @@ public class MainController {
     public String home(Model model) {
 
         ItemsList itemsList = new ItemsList(userService.newOrUpdateList());
-        itemsList.setDate((itemService.setDate()));
+        itemsList.setDate(itemService.setDate());
 
         model.addAttribute("itemsList", itemsList);
 

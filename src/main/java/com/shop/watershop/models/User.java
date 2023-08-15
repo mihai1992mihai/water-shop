@@ -40,13 +40,11 @@ public class User {
     private Long id;
 
     @AZ09
-    @Size(min = 2, message = "*Your user name must have at least 5 characters")
     @NotBlank(message = "*Please provide a user name")
     @Column(name = "first_name")
     private String firstName;
 
     @AZ09
-    @Size(min = 2, message = "*Your user name must have at least 5 characters")
     @NotBlank(message = "*Please provide a user name")
     @Column(name = "last_name")
     private String lastName;
