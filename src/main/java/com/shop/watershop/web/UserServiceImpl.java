@@ -1,6 +1,5 @@
-package com.shop.watershop.services;
+package com.shop.watershop.web;
 
-import com.shop.watershop.exception.EntityNotFoundException;
 import com.shop.watershop.models.Item;
 import com.shop.watershop.models.Role;
 import com.shop.watershop.models.User;
@@ -18,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Lazy
     @Autowired
@@ -30,9 +29,8 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private ItemService itemService;
 
-
     public User save(User user) {
-        if(user.getId()!=null){
+        if (user.getId() != null) {
 
             return userRepository.save(user);
         } else {
@@ -48,9 +46,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findByEmail(String email){
+    public User findByEmail(String email) {
 
-       return unwrapUser(userRepository.findByEmail(email));
+        return unwrapUser(userRepository.findByEmail(email));
     }
 
     @Override
@@ -59,21 +57,21 @@ public class UserServiceImpl implements UserService{
     }
 
 
-    public Set<User> findAll(){
+    public Set<User> findAll() {
         Set<User> set = new HashSet();
         userRepository.findAll().forEach(set::add);
         return set;
     }
 
-    public User unwrapUser(Optional<User> user){
-            if(user.isPresent()){
-                return user.get();
-            } else {
-                throw new UsernameNotFoundException("Invalid email");
-            }
+    public User unwrapUser(Optional<User> user) {
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new UsernameNotFoundException("Invalid email");
+        }
     }
 
-    public User getLoggedUser(){
+    public User getLoggedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = null;
 
@@ -93,7 +91,7 @@ public class UserServiceImpl implements UserService{
 
     public ArrayList<Item> newOrUpdateList() {
 
-        if(getLoggedUser().getItems().isEmpty()) {
+        if (getLoggedUser().getItems().isEmpty()) {
             ArrayList<Item> list = itemService.newItemsList();
             return list;
         } else {

@@ -1,4 +1,4 @@
-package com.shop.watershop.services;
+package com.shop.watershop.web;
 
 import com.shop.watershop.exception.EntityNotFoundException;
 import com.shop.watershop.models.Item;
@@ -22,8 +22,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ItemRepository itemRepository;
-
-
     @Autowired
     private UserRepository userRepository;
 
@@ -66,15 +64,15 @@ public class ItemServiceImpl implements ItemService {
 
     public ArrayList<Item> newItemsList() {
         ArrayList<Item> list = new ArrayList<>();
-        Item item1 =new Item();
+        Item item1 = new Item();
         item1.setCategory(unwrapItem(itemRepository.findById(1L)).getCategory());
         item1.setPrice(unwrapItem(itemRepository.findById(1L)).getPrice());
         item1.setAmount(unwrapItem(itemRepository.findById(1L)).getAmount());
-        Item item2 =new Item();
+        Item item2 = new Item();
         item2.setCategory(unwrapItem(itemRepository.findById(2L)).getCategory());
         item2.setPrice(unwrapItem(itemRepository.findById(2L)).getPrice());
         item2.setAmount(unwrapItem(itemRepository.findById(2L)).getAmount());
-        Item item3 =new Item();
+        Item item3 = new Item();
         item3.setCategory(unwrapItem(itemRepository.findById(3L)).getCategory());
         item3.setPrice(unwrapItem(itemRepository.findById(3L)).getPrice());
         item3.setAmount(unwrapItem(itemRepository.findById(3L)).getAmount());
@@ -122,7 +120,7 @@ public class ItemServiceImpl implements ItemService {
         LocalDate localDate = LocalDate.now();
         Date date;
 
-        if(getLoggedUser().getItems().isEmpty()) {  //???
+        if (getLoggedUser().getItems().isEmpty()) {  //???
             date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         } else {
             date = getLoggedUser().getItems().stream().findAny().get().getDate();

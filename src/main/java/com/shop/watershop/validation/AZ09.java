@@ -1,5 +1,4 @@
-package com.shop.watershop.Validation;
-
+package com.shop.watershop.validation;
 
 
 import javax.validation.Constraint;
@@ -11,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy =  AZ09Validator.class)
+@Constraint(validatedBy = AZ09Validator.class)
 public @interface AZ09 {
 
 

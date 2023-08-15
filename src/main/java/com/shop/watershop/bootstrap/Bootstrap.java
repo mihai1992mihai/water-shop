@@ -1,18 +1,13 @@
-package com.shop.watershop.Bootstrap;
+package com.shop.watershop.bootstrap;
 
 import com.shop.watershop.models.Item;
-import com.shop.watershop.models.ItemsList;
 import com.shop.watershop.models.User;
 import com.shop.watershop.repository.ItemRepository;
 import com.shop.watershop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class Bootstrap implements CommandLineRunner {
@@ -25,7 +20,6 @@ public class Bootstrap implements CommandLineRunner {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
-
 
     @Override
     public void run(String... args) throws Exception {
@@ -53,7 +47,6 @@ public class Bootstrap implements CommandLineRunner {
         user.setFirstName("Mihai");
         user.setLastName("Juncu");
         userRepository.save(user);
-
 
 
     }

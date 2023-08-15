@@ -1,7 +1,6 @@
-package com.shop.watershop.controllers;
+package com.shop.watershop.web;
 
 import com.shop.watershop.models.User;
-import com.shop.watershop.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +13,6 @@ import javax.validation.Valid;
 
 @Controller
 public class UserController {
-
 	@Autowired
 	UserService userService;
 	

@@ -4,6 +4,8 @@ import com.shop.watershop.models.Item;
 import com.shop.watershop.models.User;
 import com.shop.watershop.repository.ItemRepository;
 import com.shop.watershop.repository.UserRepository;
+import com.shop.watershop.web.ItemService;
+import com.shop.watershop.web.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

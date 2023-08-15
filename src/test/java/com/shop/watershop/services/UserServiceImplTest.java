@@ -1,18 +1,15 @@
 package com.shop.watershop.services;
 
-import com.shop.watershop.models.Item;
 import com.shop.watershop.models.Role;
 import com.shop.watershop.models.User;
 import com.shop.watershop.repository.UserRepository;
+import com.shop.watershop.web.ItemService;
+import com.shop.watershop.web.UserService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,5 +1,4 @@
-package com.shop.watershop.Validation;
-
+package com.shop.watershop.validation;
 
 
 import javax.validation.ConstraintValidator;
@@ -12,10 +11,8 @@ public class AZ09Validator implements ConstraintValidator<AZ09, String> {
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
         Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
         Matcher matcher = pattern.matcher(value);
-        boolean badCharacters = matcher.find(); //false if characters are a-z or 0-9
-        if(!badCharacters){
-            return true;
-        }
-        return false;
+        boolean badCharacters = matcher.find();
+
+        return !badCharacters;
     }
 }
