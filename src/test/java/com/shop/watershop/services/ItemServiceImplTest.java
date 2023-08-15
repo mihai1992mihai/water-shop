@@ -205,27 +205,6 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void getLoggedUser() {
-        User user = new User();
-        user.setId(1L);
-        user.setEmail("user@example.com");
-        user.setPassword("password");
-
-        when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-        Authentication authentication = mock(Authentication.class);
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        UserDetails userDetails = mock(UserDetails.class);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userDetails.getUsername()).thenReturn("user@example.com");
-
-        User result = itemService.getLoggedUser();
-
-        assertEquals(user, result);
-    }
-
-    @Test
     void setDateFromExistingItem() {
         User user = new User();
         user.setId(1L);

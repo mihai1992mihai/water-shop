@@ -4,23 +4,21 @@ import com.shop.watershop.models.Item;
 import com.shop.watershop.models.User;
 import com.shop.watershop.repository.ItemRepository;
 import com.shop.watershop.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
 public class Bootstrap implements CommandLineRunner {
 
-    @Autowired
     ItemRepository itemRepository;
-
-    @Autowired
     UserRepository userRepository;
-
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    BCryptPasswordEncoder passwordEncoder;
     @Override
     public void run(String... args) throws Exception {
         Item item1 = new Item();
@@ -43,7 +41,7 @@ public class Bootstrap implements CommandLineRunner {
 
         User user = new User();
         user.setEmail("mihai@yahoo.com");
-        user.setPassword(bCryptPasswordEncoder.encode("123456"));
+        user.setPassword(passwordEncoder.encode("123456"));
         user.setFirstName("Mihai");
         user.setLastName("Juncu");
         userRepository.save(user);

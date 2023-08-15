@@ -23,8 +23,6 @@ public interface ItemService {
 
     public ArrayList<Item> getUserItemsSortedByCategory(Long userId);
 
-    public User getLoggedUser();
-
     public Set<Item> getUserItems(Long userId);
 
     public Date setDate();

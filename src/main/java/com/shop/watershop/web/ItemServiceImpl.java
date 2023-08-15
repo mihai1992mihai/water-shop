@@ -5,7 +5,9 @@ import com.shop.watershop.models.Item;
 import com.shop.watershop.models.User;
 import com.shop.watershop.repository.ItemRepository;
 import com.shop.watershop.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,8 +24,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ItemRepository itemRepository;
+
+    @Lazy
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     public Item findById(Long id) {
         return unwrapItem(itemRepository.findById(id));
@@ -84,7 +88,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     public ArrayList<Item> getUserItemsSortedByCategory(Long userId) {
-        Set<Item> set = getUserItems(getLoggedUser().getId());
+        Set<Item> set = getUserItems(userService.getLoggedUser().getId());
         ArrayList<Item> items = new ArrayList<>(set);
 
         ArrayList<Item> sortedItems = items.stream()
@@ -94,36 +98,16 @@ public class ItemServiceImpl implements ItemService {
         return sortedItems;
     }
 
-    public User getLoggedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = null;
-
-        if (authentication != null) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof UserDetails) {
-                String userEmail = ((UserDetails) principal).getUsername();
-                user = userRepository.findByEmail(userEmail)
-                        .orElseThrow(() -> new UsernameNotFoundException("User with email " + userEmail + " not found."));
-
-
-            } else {
-                throw new UsernameNotFoundException("Invalid email or password.");
-            }
-
-
-        }
-        return user;
-    }
 
     @Override
     public Date setDate() {
         LocalDate localDate = LocalDate.now();
         Date date;
 
-        if (getLoggedUser().getItems().isEmpty()) {  //???
+        if (userService.getLoggedUser().getItems().isEmpty()) {  //???
             date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         } else {
-            date = getLoggedUser().getItems().stream().findAny().get().getDate();
+            date = userService.getLoggedUser().getItems().stream().findAny().get().getDate();
         }
 
         return date;

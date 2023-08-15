@@ -3,6 +3,7 @@ package com.shop.watershop.web;
 import com.shop.watershop.models.Item;
 import com.shop.watershop.models.ItemsList;
 import com.shop.watershop.models.User;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,11 +14,10 @@ import javax.validation.Valid;
 import java.util.*;
 
 @Controller
+@AllArgsConstructor
 public class MainController {
 
-    @Autowired
     private ItemService itemService;
-    @Autowired
     private UserService userService;
 
     @GetMapping("/home")

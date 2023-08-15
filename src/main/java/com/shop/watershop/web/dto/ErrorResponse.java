@@ -1,4 +1,4 @@
-package com.shop.watershop.exception;
+package com.shop.watershop.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
