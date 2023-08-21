@@ -10,15 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -39,7 +33,7 @@ class ItemServiceImplTest {
     private UserService userService;
 
     @Test
-    public void findById() {
+    public void findById_whenItemExists_returnsItem() {
 
         Item item = new Item();
         item.setId(1L);
@@ -54,7 +48,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void findAll_whenItemsExist_returnsAllItems() {
         Item item1 = new Item();
         item1.setId(1L);
         item1.setCategory("Books");
@@ -75,7 +69,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void saveItem() {
+    void saveItem_whenItemExists_returnsItem() {
         Item item = new Item();
         item.setId(1L);
         item.setCategory("Books");
@@ -89,7 +83,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void getUserItems() {
+    void getUserItems_whenItemsExist_returnsItems() {
         User user = new User();
         user.setId(1L);
         user.setEmail("user@example.com");
@@ -115,7 +109,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void deleteByItemIdAndUserId() {
+    void deleteByItemIdAndUserId_whenInvoked_deletesItem() {
         User user = new User();
         user.setId(1L);
         user.setEmail("user@example.com");
@@ -125,21 +119,21 @@ class ItemServiceImplTest {
         item1.setCategory("Books");
         item1.setPrice(10.0);
         item1.setAmount(2.0);
-
+        item1.setUsers(Set.of(user));
         Set<Item> items = Set.of(item1);
         user.setItems(items);
 
-        when(itemRepository.findById(1L)).thenReturn(Optional.of(item1));
-
-
+        itemRepository.save(item1);
         itemService.deleteByItemIdAndUserId(1L, 1L);
-
-
         verify(itemRepository).deleteByIdAndUsersId(1L, 1L);
+
+        Optional<Item> item = itemRepository.findById(1L);
+
+        assertTrue(item.isEmpty());
     }
 
     @Test
-    void unwrapItem() {
+    void unwrapItem_whenItemExists_returnsItem() {
         Item item = new Item();
         item.setId(1L);
 
@@ -151,7 +145,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void totalPrice() {
+    void totalPrice_whenItemsExist_returnsTotalPrice() {
         Item item1 = new Item();
         item1.setPrice(10.0);
         item1.setAmount(2.0);
@@ -169,34 +163,27 @@ class ItemServiceImplTest {
 
 
     @Test
-    void getUserItemsSortedByCategory() {
-        User user = new User();
+    void getUserItemsSortedByCategory_whenUserHasItems_returnsSortedItems() {
+        User user = mock(User.class);
         user.setId(1L);
-
         Item item1 = new Item();
         item1.setCategory("Books");
         item1.setId(1L);
-
         Item item2 = new Item();
         item2.setCategory("Games");
         item2.setId(2L);
+        Set<Item> items = new HashSet<>();
+        items.add(item1);
+        items.add(item2);
 
-        Set<Item> items = Set.of(item1, item2);
-        ArrayList<Item> list = new ArrayList<>(items);
-
-
+        user.setItems(items);
         user.setEmail("user@example.com");
         user.setPassword("password");
-        when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-        Authentication authentication = mock(Authentication.class);
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        UserDetails userDetails = mock(UserDetails.class);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userDetails.getUsername()).thenReturn("user@example.com");
-        when(itemService.getUserItems(1L)).thenReturn(items);
 
+
+        when(user.getItems()).thenReturn(items);
+        when(userService.getLoggedUser()).thenReturn(user);
+        when(itemService.getUserItems(any())).thenReturn(items);
 
         ArrayList<Item> sortedItems = itemService.getUserItemsSortedByCategory(1L);
 
@@ -205,41 +192,30 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void setDateFromExistingItem() {
-        User user = new User();
+    void setDate_whenUserHasItem_returnsItemDate() {
+        LocalDate localDate = LocalDate.now().plusDays(1);
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        User user = mock(User.class);
         user.setId(1L);
         user.setEmail("user@example.com");
         user.setPassword("password");
         Item item = new Item();
         item.setId(1L);
-        item.setCategory("Books");
-        item.setPrice(10.0);
-        item.setAmount(2.0);
-
-        LocalDate localDate = LocalDate.now();
-        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         item.setDate(date);
-        Set<Item> items = new HashSet<>(Collections.singleton(item));
-        user.setItems(items);
+        Set<Item> items = new HashSet<>();
+        items.add(item);
 
-        when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-        Authentication authentication = mock(Authentication.class);
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        UserDetails userDetails = mock(UserDetails.class);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userDetails.getUsername()).thenReturn("user@example.com");
+        when(user.getItems()).thenReturn(items);
+        when(userService.getLoggedUser()).thenReturn(user);
 
-        // when
         Date result = itemService.setDate();
 
-        // then
         assertEquals(date, result);
     }
 
     @Test
-    void setDateNew() {
+    void setDate_whenUserHasNoItem_returnsNewDate() {
 
         LocalDate localDate = LocalDate.now();
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -253,16 +229,6 @@ class ItemServiceImplTest {
         when(user.getItems()).thenReturn(itemsMock);
         when(itemsMock.isEmpty()).thenReturn(true);
         when(userService.getLoggedUser()).thenReturn(user);
-        when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-
-        Authentication authentication = mock(Authentication.class);
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        UserDetails userDetails = mock(UserDetails.class);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userDetails.getUsername()).thenReturn("user@example.com");
-
 
         Date result = itemService.setDate();
 

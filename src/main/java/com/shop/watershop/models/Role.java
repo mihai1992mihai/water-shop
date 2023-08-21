@@ -1,11 +1,8 @@
 package com.shop.watershop.models;
 
 import javax.persistence.*;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-
 import java.util.Set;
 
 @Getter

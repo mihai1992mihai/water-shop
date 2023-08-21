@@ -3,7 +3,6 @@ package com.shop.watershop.repository;
 import com.shop.watershop.models.Item;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 import java.util.Set;
 

@@ -3,10 +3,7 @@ package com.shop.watershop.models;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Component;
-
 import javax.validation.constraints.Future;
-import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Date;
 

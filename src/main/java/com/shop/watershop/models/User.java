@@ -14,12 +14,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.JoinColumn;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.watershop.validation.AZ09;
-
 import lombok.*;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

@@ -2,18 +2,10 @@ package com.shop.watershop.web;
 
 import com.shop.watershop.exception.EntityNotFoundException;
 import com.shop.watershop.models.Item;
-import com.shop.watershop.models.User;
 import com.shop.watershop.repository.ItemRepository;
-import com.shop.watershop.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -83,7 +75,7 @@ public class ItemServiceImpl implements ItemService {
         list.add(item3);
         list.add(item2);
         list.add(item1);
-        
+
         return list;
     }
 
@@ -104,7 +96,7 @@ public class ItemServiceImpl implements ItemService {
         LocalDate localDate = LocalDate.now();
         Date date;
 
-        if (userService.getLoggedUser().getItems().isEmpty()) {  //???
+        if (userService.getLoggedUser().getItems().isEmpty()) {
             date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         } else {
             date = userService.getLoggedUser().getItems().stream().findAny().get().getDate();

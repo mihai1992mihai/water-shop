@@ -3,7 +3,6 @@ package com.shop.watershop.services;
 import com.shop.watershop.models.Role;
 import com.shop.watershop.models.User;
 import com.shop.watershop.repository.UserRepository;
-import com.shop.watershop.web.ItemService;
 import com.shop.watershop.web.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +12,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class UserServiceImplTest {
 
-    @MockBean
-    private ItemService itemService;
 
     @Autowired
     private UserService userService;
@@ -33,11 +29,10 @@ class UserServiceImplTest {
     @MockBean
     private UserRepository userRepository;
 
-    @MockBean
-    private BCryptPasswordEncoder passwordEncoder;
+
 
     @Test
-    void save() {
+    void save_whenInvoked_returnsSavedUser() {
         User user = new User();
         user.setId(1L);
         user.setEmail("user@example.com");
@@ -55,7 +50,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail() {
+    void findByEmail_whenInvoked_returnsUser() {
         User user = new User();
         user.setId(1L);
         user.setEmail("user@example.com");
@@ -68,7 +63,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findById() {
+    void findById_whenInvoked_returnsUser() {
         User user = new User();
         user.setId(1L);
         user.setEmail("user@example.com");
@@ -82,7 +77,7 @@ class UserServiceImplTest {
 
 
     @Test
-    void findAll() {
+    void findAll_whenInvoked_returnsSetOfUsers() {
 
         Set<User> set = new HashSet<>();
         set.add(new User());
@@ -97,7 +92,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void unwrapUser() {
+    void unwrapUser_ifUserIsPresent_returnsUser() {
         Optional<User> user = Optional.of(new User());
 
         when(userRepository.findById(1L)).thenReturn(user);
@@ -108,7 +103,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getLoggedUser() {
+    void getLoggedUser_whenInvoked_returnsUser() {
 
         User user = new User();
         user.setId(1L);

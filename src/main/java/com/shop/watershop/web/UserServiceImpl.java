@@ -1,6 +1,5 @@
 package com.shop.watershop.web;
 
-import com.shop.watershop.models.Item;
 import com.shop.watershop.models.Role;
 import com.shop.watershop.models.User;
 import com.shop.watershop.repository.UserRepository;
@@ -12,9 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
