@@ -80,10 +80,10 @@ public class ItemServiceImpl implements ItemService {
         item3.setCategory(unwrapItem(itemRepository.findById(3L)).getCategory());
         item3.setPrice(unwrapItem(itemRepository.findById(3L)).getPrice());
         item3.setAmount(unwrapItem(itemRepository.findById(3L)).getAmount());
-        list.add(item1);
-        list.add(item2);
         list.add(item3);
-
+        list.add(item2);
+        list.add(item1);
+        
         return list;
     }
 
@@ -121,8 +121,8 @@ public class ItemServiceImpl implements ItemService {
         } else {
             Set set = userService.getLoggedUser().getItems();
             ArrayList<Item> items = new ArrayList<>(set);
-            items.stream().sorted(Comparator.comparing(Item::getCategory)).collect(Collectors.toList());
-            return items;
+            ArrayList<Item> sorteditems = items.stream().sorted(Comparator.comparing(Item::getCategory)).collect(Collectors.toCollection(ArrayList::new));
+            return sorteditems;
         }
 
 

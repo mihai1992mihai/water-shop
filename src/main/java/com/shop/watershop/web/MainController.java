@@ -34,7 +34,9 @@ public class MainController {
 
     @PostMapping("/post")
     public String handleSubmit(@Valid @ModelAttribute("itemsList") ItemsList itemsList, BindingResult bindingResult) {
-
+        if(itemsList.getItems().stream().map(item -> item.getAmount()).allMatch(amount -> amount == 0)){
+            bindingResult.rejectValue("items","", "You must add at least one item");
+        }
         if (bindingResult.hasErrors()) {
             return "index";
         }

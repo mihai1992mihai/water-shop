@@ -24,10 +24,14 @@
                 <td><input type="number" placeholder="Enter the number" th:field="*{items[__${itemStat.index}__].amount}" /></td>
             </tr>
         </table>
+        <p style="color:red" th:errors="*{items}" th:if="${#fields.hasErrors('items')}"></p>
 
 
-        <input type="date" style="color:black" th:field="*{date}" />
+        <label  style="text-align:center" for="date">Delivery date</label>
+        <input id="date" type="date" style="color:black" th:field="*{date}" />
+
         <p style="color:red" th:errors="*{date}" th:if="${#fields.hasErrors('date')}"></p>
+
 
         <input type="submit" value="Add to basket">
 
