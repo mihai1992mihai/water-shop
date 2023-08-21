@@ -112,4 +112,19 @@ public class ItemServiceImpl implements ItemService {
 
         return date;
     }
+
+    public ArrayList<Item> newOrUpdateList() {
+
+        if (userService.getLoggedUser().getItems().isEmpty()) {
+            ArrayList<Item> list = newItemsList();
+            return list;
+        } else {
+            Set set = userService.getLoggedUser().getItems();
+            ArrayList<Item> items = new ArrayList<>(set);
+            items.stream().sorted(Comparator.comparing(Item::getCategory)).collect(Collectors.toList());
+            return items;
+        }
+
+
+    }
 }

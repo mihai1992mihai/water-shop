@@ -23,7 +23,7 @@ public class MainController {
     @GetMapping("/home")
     public String home(Model model) {
 
-        ItemsList itemsList = new ItemsList(userService.newOrUpdateList());
+        ItemsList itemsList = new ItemsList(itemService.newOrUpdateList());
         itemsList.setDate(itemService.setDate());
 
         model.addAttribute("itemsList", itemsList);

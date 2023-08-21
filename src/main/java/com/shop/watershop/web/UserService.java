@@ -23,7 +23,6 @@ public interface UserService {
 
     public User getLoggedUser();
 
-    public ArrayList<Item> newOrUpdateList();
 
 
 }

@@ -89,18 +89,4 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public ArrayList<Item> newOrUpdateList() {
-
-        if (getLoggedUser().getItems().isEmpty()) {
-            ArrayList<Item> list = itemService.newItemsList();
-            return list;
-        } else {
-            Set set = getLoggedUser().getItems();
-            ArrayList<Item> items = new ArrayList<>(set);
-            items.stream().sorted(Comparator.comparing(Item::getCategory)).collect(Collectors.toList());
-            return items;
-        }
-
-
-    }
 }

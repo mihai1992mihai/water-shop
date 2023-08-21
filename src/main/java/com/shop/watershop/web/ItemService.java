@@ -27,5 +27,7 @@ public interface ItemService {
 
     public Date setDate();
 
+    public ArrayList<Item> newOrUpdateList();
+
 
 }
