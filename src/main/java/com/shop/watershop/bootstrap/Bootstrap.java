@@ -4,18 +4,18 @@ import com.shop.watershop.models.Item;
 import com.shop.watershop.models.User;
 import com.shop.watershop.repository.ItemRepository;
 import com.shop.watershop.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class Bootstrap implements CommandLineRunner {
 
-    ItemRepository itemRepository;
-    UserRepository userRepository;
-    BCryptPasswordEncoder passwordEncoder;
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
     @Override
     public void run(String... args) throws Exception {
         Item item1 = new Item();

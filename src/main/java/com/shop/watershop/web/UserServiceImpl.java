@@ -23,8 +23,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ItemService itemService;
 
     public User save(User user) {
         if (user.getId() != null) {

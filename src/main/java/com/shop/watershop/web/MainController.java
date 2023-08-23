@@ -3,7 +3,7 @@ package com.shop.watershop.web;
 import com.shop.watershop.models.Item;
 import com.shop.watershop.models.ItemsList;
 import com.shop.watershop.models.User;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,11 +12,11 @@ import javax.validation.Valid;
 import java.util.*;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MainController {
 
-    private ItemService itemService;
-    private UserService userService;
+    private final ItemService itemService;
+    private final UserService userService;
 
     @GetMapping("/home")
     public String home(Model model) {

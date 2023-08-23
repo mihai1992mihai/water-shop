@@ -3,8 +3,7 @@ package com.shop.watershop.web;
 import com.shop.watershop.exception.EntityNotFoundException;
 import com.shop.watershop.models.Item;
 import com.shop.watershop.repository.ItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -12,14 +11,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    @Autowired
-    private ItemRepository itemRepository;
-
-    @Lazy
-    @Autowired
-    private UserService userService;
+    private final ItemRepository itemRepository;
+    private final UserService userService;
 
     public Item findById(Long id) {
         return unwrapItem(itemRepository.findById(id));

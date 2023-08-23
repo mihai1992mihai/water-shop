@@ -1,6 +1,6 @@
 package com.shop.watershop.configuration;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,9 +16,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    public MyUserDetailsService myUserDetailsService;
+    public final MyUserDetailsService myUserDetailsService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

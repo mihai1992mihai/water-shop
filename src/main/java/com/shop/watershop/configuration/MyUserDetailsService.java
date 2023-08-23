@@ -4,6 +4,7 @@ import com.shop.watershop.models.Role;
 import com.shop.watershop.models.User;
 import com.shop.watershop.web.UserService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,9 +17,9 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
-    private UserService userService;
+    private final UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

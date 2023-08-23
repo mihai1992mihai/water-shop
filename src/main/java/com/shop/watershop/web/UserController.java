@@ -1,7 +1,7 @@
 package com.shop.watershop.web;
 
 import com.shop.watershop.models.User;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
-	UserService userService;
+	private final UserService userService;
 	
 	@GetMapping(value = {"/login","/"} )
 	public String login() {
