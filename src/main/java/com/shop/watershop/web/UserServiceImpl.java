@@ -5,6 +5,8 @@ import com.shop.watershop.models.User;
 import com.shop.watershop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,8 +28,11 @@ public class UserServiceImpl implements UserService {
 
     public User save(User user) {
         if (user.getId() != null) {
-
-            return userRepository.save(user);
+            try {
+                return userRepository.save(user);
+            } catch (DataIntegrityViolationException e) {
+                throw new DataIntegrityViolationException("User with this email already exists");
+            }
         } else {
             Role role = new Role("ROLE_USER");
 
@@ -37,7 +42,11 @@ public class UserServiceImpl implements UserService {
             user.setRoles(roleSet);
         }
 
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("User with this email already exists");
+        }
     }
 
     @Override

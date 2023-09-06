@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -28,15 +29,16 @@ public class UserController {
 	}
 
 	@PostMapping("/registration")
-	public String registerUserAccount( @ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-		if(userService.findAll().stream()
-				.anyMatch(user1 -> user1.getEmail().equals(user.getEmail()))){
-			bindingResult.rejectValue("email","", "Email already registered");
-		}
-			if(bindingResult.hasErrors()){
+	public String registerUserAccount(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model, HttpSession session) {
+//		if(userService.findAll().stream()
+//				.anyMatch(user1 -> user1.getEmail().equals(user.getEmail()))){
+//			bindingResult.rejectValue("email","", "Email already registered");
+//		}
+		if(bindingResult.hasErrors()){
 			return "registration";
 		}
 
+		session.setAttribute("user", user);
 		userService.save(user);
 
 		return "redirect:/login?success";
