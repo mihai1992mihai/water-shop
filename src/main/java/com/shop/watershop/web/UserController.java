@@ -30,10 +30,7 @@ public class UserController {
 
 	@PostMapping("/registration")
 	public String registerUserAccount(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model, HttpSession session) {
-//		if(userService.findAll().stream()
-//				.anyMatch(user1 -> user1.getEmail().equals(user.getEmail()))){
-//			bindingResult.rejectValue("email","", "Email already registered");
-//		}
+
 		if(bindingResult.hasErrors()){
 			return "registration";
 		}
